@@ -17,19 +17,19 @@ const Header = () => {
         console.log('로그인한 유저 없음')
     } else {
         setIsLogin(true);
-        getUserId();
+        // getUserId();
         console.log("sessionStorage.getItem('token') : " , sessionStorage.getItem('token'))
       }
     };
 
-  const getUserId = () => {
-    axios.get(`http://127.0.0.1:5000/checkid/${sessionStorage.getItem('token')}`)
-    .then(response => {
-        console.log(response)
-        setUserId(response.data.ID)
-        // setUserId(response)
-    })
-  }
+  // const getUserId = () => {
+  //   axios.get(`http://127.0.0.1:5000/checkid/${sessionStorage.getItem('token')}`)
+  //   .then(response => {
+  //       console.log(response)
+  //       setUserId(response.data.ID)
+  //       // setUserId(response)
+  //   }).catch(error => console.log(error))
+  // }
 
   return(
     <div className="all">

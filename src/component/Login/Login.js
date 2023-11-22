@@ -11,9 +11,9 @@ const Login = () => {
     const handlerPW = e => { setPassword(e.target.value) }
 
     const onClickLogin = () => {
-        axios.get(`http://127.0.0.1:5000/login/${ID}/${password}` )
+        axios.post(`${process.env.REACT_APP_LAMBDA_API_URL}/login`, { ID : ID, password : password }, { headers: { 'Content-Type': 'application/json' } } )
         .then(response => {
-            console.log(response.data)
+            // console.log(response.data)
             if (response.data === 'NON') {
                 alert('일치하는 회원정보가 없습니다. 회원가입을 해주세요:)');
                 document.location.href = '/signup'
@@ -24,9 +24,9 @@ const Login = () => {
                 alert('비밀번호가 틀렸습니다.')
                 document.location.href = '/login'
             } else {
-                console.log(response.data.token);
+                console.log(response.data);
                 // sessionStorage.setItem('userId', response.data.userId);
-                sessionStorage.setItem('token', response.data.token)
+                sessionStorage.setItem('token', response.data)
                 document.location.href = '/'
             }
             

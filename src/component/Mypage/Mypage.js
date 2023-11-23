@@ -20,7 +20,7 @@ const Mypage = () => {
             console.log(res.data["name"])
             setUserName(res.data["name"])
         }).catch(error => console.log(error));
-
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
     
     return (

@@ -9,13 +9,13 @@ const Mypage = () => {
 
     useEffect(() => {
 
-        axios.get(`http://127.0.0.1:5000/mypage/${sessionStorage.getItem('token')}`)
+        axios.get(`${process.env.REACT_APP_EC2_API_URL}/mypage/${sessionStorage.getItem('token')}`)
         .then(res => {
             console.log(typeof(sessionStorage.getItem('userId')))
             setRentList(res.data)
         }).catch(error => console.log(error));
         
-        axios.get(`http://127.0.0.1:5000/mypage/chageName/${sessionStorage.getItem('token')}`)
+        axios.get(`${process.env.REACT_APP_EC2_API_URL}/mypage/chageName/${sessionStorage.getItem('token')}`)
         .then(res => {
             console.log(res.data["name"])
             setUserName(res.data["name"])
@@ -38,7 +38,7 @@ const Mypage = () => {
                     <div class="title">대여현황
                     </div>
                     {console.log("rentlist",rentList)}
-                    {rentList != "" ? (
+                    {rentList !== "" ? (
                         <div className="list">
                         <div className="top">                    
                             <div className="list_rent">대여 목록</div>

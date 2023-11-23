@@ -7,7 +7,7 @@ const Home = () => {
     return (
         <>  
         <div className='homepage'>
-            <img src={backgroundImg}/>
+            <img src={backgroundImg} alt='background'/>
         </div>
         </>
     );

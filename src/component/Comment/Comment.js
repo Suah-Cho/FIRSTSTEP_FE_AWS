@@ -4,7 +4,8 @@ import CommentList from "./CommentList";
 import axios from "axios";
 import CommentPagination from "./CommentPagination";
 import './Comment.css'
-const Comment = ({boardId}) => {
+
+const Comment = () => {
     const [ comments, setComments ] = useState({});
     const [ page, setPage ] = useState(1);
     const limit = 5;
@@ -12,7 +13,7 @@ const Comment = ({boardId}) => {
 
 
     useEffect(() => {
-        axios.get(`http://127.0.0.1:5000/boardlist/${boardId}/commentlist`)
+        axios.get(`${process.env.REACT_APP_EC2_API_URL}/boardlist/${boardId}/commentlist`)
         .then(response => {
             setComments(response.data)
             console.log(response.data)
@@ -28,7 +29,7 @@ const Comment = ({boardId}) => {
 
             {
                 item.slice(startat, startat + limit ).map((comment, idx) => {
-                    if (comment.userId == sessionStorage.getItem('userId')) {
+                    if (comment.userId === sessionStorage.getItem('userId')) {
                         return <CommentList comment={comment} idx={idx} isuser={true}/>
                     } else {
                         return <CommentList comment={comment} idx={idx} isuser={false}/>

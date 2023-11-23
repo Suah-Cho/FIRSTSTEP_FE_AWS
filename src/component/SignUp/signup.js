@@ -36,7 +36,7 @@ function SignUp() {
 
     }
     const postUser = () => {
-        axios.post('http://127.0.0.1:5000/signup', 
+        axios.post(`${process.env.REACT_APP_EC2_API_URL}/signup`, 
         {ID: ID, password: password, password_confirm: password_confirm, name: name, phoneNumber: phoneNumber }
         , { headers: { 'Content-Type': 'application/json' } })
         .then(response => {

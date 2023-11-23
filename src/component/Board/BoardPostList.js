@@ -20,7 +20,7 @@ function BoardPostList() {
     const handlerSearchWord = (e) => {setSearchWord(e.target.value);}
     const handlerSearchWordKey = e => {setSearchWordKey(e.target.value);}
     const clickSearButton = () => {
-        axios.get(`http://127.0.0.1:5000/boardlist/${searchWordKey}/${searchWord}`)
+        axios.get(`${process.env.REACT_APP_EC2_API_URL}/boardlist/${searchWordKey}/${searchWord}`)
         .then(responce => {
             console.log(responce)
             setPosts(responce.data)

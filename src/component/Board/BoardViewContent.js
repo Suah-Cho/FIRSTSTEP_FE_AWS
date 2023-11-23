@@ -10,17 +10,12 @@ const BoardViewContent = ({boardId}) =>{
     // 게시판 상세정보 데이터
     const [ boardData, setBoardData] = useState([{}]);
     const [ userData, setUserData] = useState([{}]);
-
-    // const [ userId, setUserId ] = useState('');
-    // const [ ID, setID ] = useState('');
-
     const [ title, setTitle ] = useState('');
     const [ content, setContent ] = useState('');
     const today = new Date()
+
     //반납 - 캘린더
     const [returnDate, setReturnDate] = useState(new Date(today.setDate(today.getDate() + 7)))
-
-
 
     const handlerChangeTitle = e => {
         setTitle(e.target.value)
@@ -40,15 +35,8 @@ const BoardViewContent = ({boardId}) =>{
 
     // 게시판 데이터 가져오기
     useEffect(() => {
-        // axios.get(`http://127.0.0.1:5000/checkid/${sessionStorage.getItem('token')}`)
-        // .then(responce => {
-        //     setID(responce.data.ID)
-        //     setUserId(responce.data.userId)
-        //     console.log("세션 확인:", responce.data.ID, responce.data.userId)
-
-        // }).catch(error => console.log(error));
-
-        axios.get(`http://127.0.0.1:5000/board/detail/${boardId}/${sessionStorage.getItem('token')}`)
+        console.log("session : ", sessionStorage.getItem('token'))
+        axios.get(`${process.env.REACT_APP_EC2_API_URL}/board/detail/${boardId}/${sessionStorage.getItem('token')}`)
         .then(res => {
             console.log(res)
             console.log(res.data.userData['userId'], res.data.boardData["userId"])
@@ -58,37 +46,32 @@ const BoardViewContent = ({boardId}) =>{
                 navigate('/board');
             }
             //로그인 x - 목록 buttonChk = 1
-            else if(sessionStorage.getItem('token') == null ){
+            else if(sessionStorage.getItem('token') === null ){
                 setButtonChk("1")
                 setBoardData(res.data.boardData)
             }
-            //로그인 0
+
             //로그인 0 - 로그인 user = 게시물 작성자 user
-            else if(res.data.userData['userId'] == res.data.boardData["userId"]){
-                // alert("목록 / 수정 / 삭제")
-                // console.log(userId,"==",res.data[0]["userId"], "=> ", (userId==res.data[0]["userId"]))
+            else if(res.data.userData['userId'] === res.data.boardData["userId"]){
                 setButtonChk("2")
                 setBoardData(res.data.boardData)
             }
             //로그인 0 - 로그인 user != 게시물 작성자 user
             else {
                 //게시물 : 대여가능한경우
-                if(res.data.boardData["rent"] == "active"){    
-                    // alert("대여")
+                if(res.data.boardData["rent"] === "active"){    
                     setButtonChk("3")       
-                } else if (res.data.boardData['rent'] == 'disable') {
+                } else if (res.data.boardData['rent'] === 'disable') {
                     setButtonChk("0")
                 }
                  //게시물 : 대여중인경우
                 else{
                     //게시물 : 대여중인경우 - 대여한 사람인경우
-                    if(res.data.boardData["rentusreId"] == res.data.userData['userId']){
-                        // alert("반납")
+                    if(res.data.boardData["rentusreId"] === res.data.userData['userId']){
                         setButtonChk("4")  
                     }
                     //게시물 : 대여중인경우 - 대여하지 않은 사람인경우
                     else{
-                        // alert("대여중")
                         setButtonChk("5") 
                     }
                 }
@@ -111,7 +94,7 @@ const BoardViewContent = ({boardId}) =>{
     const handlerEditFinish= () =>{
         // 수정완료 후 데이터 변경
         console.log("수정 : ", boardId, title, content)
-        axios.put(`http://127.0.0.1:5000/boardEdit/${boardId}`, {title : title, content : content}, { headers: { 'Content-Type': 'application/json' } })
+        axios.put(`${process.env.REACT_APP_EC2_API_URL}/boardEdit/${boardId}`, {title : title, content : content}, { headers: { 'Content-Type': 'application/json' } })
         .then(res => {
             setEdit(!edit);
             // console.log(res)
@@ -125,7 +108,7 @@ const BoardViewContent = ({boardId}) =>{
     const handlerDel = () => {
         if ( userData.userId == boardData.userId) {
             // 게시물 삭제
-            axios.delete(`http://127.0.0.1:5000/boardDelete/${boardId}`)
+            axios.delete(`${process.env.REACT_APP_EC2_API_URL}/boardDelete/${boardId}`)
             .then(response => {
 
             }).catch(err => console.log(err));
@@ -139,13 +122,13 @@ const BoardViewContent = ({boardId}) =>{
     };    
     
     const handlerRent =() => {
-        if (userData.userId == null){
+        if (userData.userId === null){
             alert("로그인하신 후 이용해주세요");
         }
         else{
             // alert("대여 가능");
             console.log(returnDate)
-            axios.put(`http://127.0.0.1:5000/boardrent/${userData.userId}`, {boardId:boardId, returnDate:returnDate}, { headers: { 'Content-Type': 'application/json' } })
+            axios.put(`${process.env.REACT_APP_EC2_API_URL}/boardrent/${userData.userId}`, {boardId:boardId, returnDate:returnDate}, { headers: { 'Content-Type': 'application/json' } })
             .then(response => {
                 console.log(response.data)
                 if (response.data === 'SUCCESS') {
@@ -160,7 +143,7 @@ const BoardViewContent = ({boardId}) =>{
     }
     const handlerReturn =() => {
         
-        axios.delete(`http://127.0.0.1:5000/boardreturn/${boardId}`)
+        axios.delete(`${process.env.REACT_APP_EC2_API_URL}/boardreturn/${boardId}`)
         .then(response => {
             console.log(response.data)
             if (response.data === 'SUCCESS') {

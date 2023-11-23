@@ -5,7 +5,7 @@ import axios from "axios";
 import CommentPagination from "./CommentPagination";
 import './Comment.css'
 
-const Comment = () => {
+const Comment = ({boardId}) => {
     const [ comments, setComments ] = useState({});
     const [ page, setPage ] = useState(1);
     const limit = 5;

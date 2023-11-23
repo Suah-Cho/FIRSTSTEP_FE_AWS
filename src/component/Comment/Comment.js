@@ -18,6 +18,7 @@ const Comment = ({boardId}) => {
             setComments(response.data)
             console.log(response.data)
         }).catch(error => console.log(error));
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     },[])
 
     const item = Object.values(comments);

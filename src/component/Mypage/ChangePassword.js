@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import './ChangePassword.css';
 import axios from "axios";
@@ -37,7 +37,6 @@ const ChangePassword = () => {
             .then(response => {
                 if (response.data === 'CORRECT') {
                     ChangePassword();
-                    // alert("현재 비밀번호가 일치합니다.")
                 } else {
                     alert("현재 비밀번호가 일치하지 않습니다.")
                 }

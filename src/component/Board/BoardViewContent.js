@@ -135,7 +135,7 @@ const BoardViewContent = ({boardId}) =>{
                 console.log(response.data)
                 if (response.data === 'SUCCESS') {
                     alert('대여를 완료했습니다.')
-                    navigate(0)
+                    navigate('/')
                 }
             }).catch(error => console.log(error))
         }
@@ -150,7 +150,7 @@ const BoardViewContent = ({boardId}) =>{
             console.log(response.data)
             if (response.data === 'SUCCESS') {
                 alert('물품을 반납했습니다.');
-                navigate(0);
+                navigate('/');
             }
         }).catch(error => console.log(error))
 

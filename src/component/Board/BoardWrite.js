@@ -34,7 +34,7 @@ const BoardWrite = () => {
         } else if (location === '') {
             alert('지역을 입력해주세요.');
         } else {
-            axios.post(`${process.env.REACT_APP_EC2_API_URL}/boardWrite`, {title : title, location : location, content : content, userId : userId }, { headers: { 'Content-Type': 'application/json' } })
+            axios.post(`${process.env.REACT_APP_EC2_API_URL}/boardWrite`, {title : title, location : location, userId : userId, content : content }, { headers: { 'Content-Type': 'application/json' } })
             .then(response => {
                 console.log(response);
                 goBoardPostList();

@@ -20,7 +20,7 @@ const BoardWrite = () => {
     useEffect(() => {
         axios.get(`http://127.0.0.1:5000/checkid/${sessionStorage.getItem('userId')}`)
         .then(responce => {
-            setUserId(responce.data.ID)
+            setID(responce.data.ID)
         }).catch(error => console.log(error));
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);

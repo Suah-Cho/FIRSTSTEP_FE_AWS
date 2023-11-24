@@ -9,18 +9,18 @@ const Mypage = () => {
 
     useEffect(() => {
 
-        axios.get(`${process.env.REACT_APP_EC2_API_URL}/mypage/${sessionStorage.getItem('token')}`)
+        axios.get(`${process.env.REACT_APP_EC2_API_URL}/mypage/${sessionStorage.getItem('userId')}`)
         .then(res => {
             console.log(typeof(sessionStorage.getItem('userId')))
             setRentList(res.data)
         }).catch(error => console.log(error));
         
-        axios.get(`${process.env.REACT_APP_EC2_API_URL}/mypage/chageName/${sessionStorage.getItem('token')}`)
+        axios.get(`${process.env.REACT_APP_EC2_API_URL}/mypage/chageName/${sessionStorage.getItem('userId')}`)
         .then(res => {
             console.log(res.data["name"])
             setUserName(res.data["name"])
         }).catch(error => console.log(error));
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
     
     return (

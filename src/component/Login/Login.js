@@ -24,10 +24,10 @@ const Login = () => {
                 alert('비밀번호가 틀렸습니다.')
                 document.location.href = '/login'
             } else {
-                console.log(response.data);
+                console.log(response.data.userId);
                 sessionStorage.setItem('userId', response.data.userId);
                 // sessionStorage.setItem('token', response.data)
-                document.location.href = '/'
+                // document.location.href = '/'
             }
             
         }).catch(error => console.log(error));

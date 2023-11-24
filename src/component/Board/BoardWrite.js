@@ -25,6 +25,7 @@ const BoardWrite = () => {
     }, []);
 
     const postData = () => {
+        console.log(sessionStorage.getItem('userId'));
         if (title === '') {
             alert('제목을 입력해주세요.');
         } else if (content === '') {

@@ -8,15 +8,16 @@ const Header = () => {
 
   useEffect(() => {
     authCheck();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
-  const authCheck = () => {
-    if (sessionStorage.getItem('token') === null) {
+ const authCheck = () => {
+    if (sessionStorage.getItem('userId') === null) {
         console.log('로그인한 유저 없음')
     } else {
         setIsLogin(true);
         // getUserId();
-        console.log("sessionStorage.getItem('token') : " , sessionStorage.getItem('token'))
+        console.log("sessionStorage.getItem('userId') : " , sessionStorage.getItem('userId'))
       }
     };
 

@@ -21,6 +21,7 @@ const BoardWrite = () => {
         axios.get(`${process.env.REACT_APP_EC2_API_URL}/checkid/${sessionStorage.getItem('userId')}`)
         .then(responce => {
             setID(responce.data.ID)
+            setUserId(responce.data.userId)
         }).catch(error => console.log(error));
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);

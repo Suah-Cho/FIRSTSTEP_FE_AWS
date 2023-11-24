@@ -52,7 +52,7 @@ const BoardViewContent = ({boardId}) =>{
             //로그인 0 - 로그인 user = 게시물 작성자 user
             else if(Number(sessionStorage.getItem('userId')) === res.data[0]["userId"]){
                 // alert("목록 / 수정 / 삭제")
-                console.log(sessionStorage.getItem('userId'),"==",res.data[0]["userId"], "=> ", (sessionStorage.getItem('userId')==res.data[0]["userId"]))
+                console.log(sessionStorage.getItem('userId'),"==",res.data[0]["userId"], "=> ", (sessionStorage.getItem('userId')===res.data[0]["userId"]))
                 setButtonChk("2")
                 setBoardData(res.data)
             }
@@ -81,6 +81,7 @@ const BoardViewContent = ({boardId}) =>{
                 setBoardData(res.data)
             }
         }).catch(err => console.log(err));
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 
     // 상태변수사용해서 textarea 활성하기
@@ -106,7 +107,7 @@ const BoardViewContent = ({boardId}) =>{
     }
     
     const handlerDel = () => {
-        if (sessionStorage.getItem('userId') == boardData[0].userId) {
+        if (sessionStorage.getItem('userId') === boardData[0].userId) {
             // 게시물 삭제
             axios.delete(`${process.env.REACT_APP_EC2_API_URL}/boardDelete/${boardId}`)
             .then(response => {

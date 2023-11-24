@@ -25,8 +25,8 @@ const Login = () => {
                 document.location.href = '/login'
             } else {
                 console.log(response.data);
-                // sessionStorage.setItem('userId', response.data.userId);
-                sessionStorage.setItem('token', response.data)
+                sessionStorage.setItem('userId', response.data.userId);
+                // sessionStorage.setItem('token', response.data)
                 document.location.href = '/'
             }
             

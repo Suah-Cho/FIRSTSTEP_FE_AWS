@@ -24,8 +24,8 @@ const Login = () => {
                 alert('비밀번호가 틀렸습니다.')
                 document.location.href = '/login'
             } else {
-                console.log(response.data.userId);
-                sessionStorage.setItem('userId', response.data.userId);
+                console.log(response.data);
+                sessionStorage.setItem('userId', response.data);
                 // sessionStorage.setItem('token', response.data)
                 // document.location.href = '/'
             }

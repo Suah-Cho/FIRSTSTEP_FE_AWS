@@ -17,7 +17,7 @@ const ChangePassword = () => {
 
     const ChangePassword = () => {
         console.log('현재 비밀번호 일치')
-        axios.put(`${process.env.REACT_APP_EC2_API_URL}/changepassword/${sessionStorage.getItem('token')}`, {newPassword:newPassword})
+        axios.put(`${process.env.REACT_APP_EC2_API_URL}/changepassword/${sessionStorage.getItem('userId')}`, {newPassword:newPassword})
         .then(response => {
             console.log(response)
             if (response.data === "SUCCESS") {
@@ -33,10 +33,11 @@ const ChangePassword = () => {
 
     const onClickChnagePassword = () => {
         if (newPassword === confirmNewPassword) {
-            axios.post(`${process.env.REACT_APP_EC2_API_URL}/checkpassword/${sessionStorage.getItem('token')}`, {constpassword:constpassword})
+            axios.post(`${process.env.REACT_APP_EC2_API_URL}/checkpassword/${sessionStorage.getItem('userId')}`, {constpassword:constpassword})
             .then(response => {
                 if (response.data === 'CORRECT') {
                     ChangePassword();
+                    // alert("현재 비밀번호가 일치합니다.")
                 } else {
                     alert("현재 비밀번호가 일치하지 않습니다.")
                 }

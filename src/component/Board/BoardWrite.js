@@ -18,7 +18,7 @@ const BoardWrite = () => {
     const handlerChangeContent = e => {setContent(e.target.value)}
 
     useEffect(() => {
-        axios.get(`http://127.0.0.1:5000/checkid/${sessionStorage.getItem('userId')}`)
+        axios.get(`${process.env.REACT_APP_EC2_API_URL}/checkid/${sessionStorage.getItem('userId')}`)
         .then(responce => {
             setID(responce.data.ID)
         }).catch(error => console.log(error));

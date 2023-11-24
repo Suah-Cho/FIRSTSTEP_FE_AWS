@@ -27,7 +27,7 @@ const Login = () => {
                 console.log(response.data);
                 sessionStorage.setItem('userId', response.data.userId);
                 // sessionStorage.setItem('token', response.data)
-                // document.location.href = '/'
+                document.location.href = '/'
             }
             
         }).catch(error => console.log(error));

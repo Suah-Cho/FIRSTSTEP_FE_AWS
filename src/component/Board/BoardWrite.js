@@ -18,11 +18,11 @@ const BoardWrite = () => {
     const handlerChangeContent = e => {setContent(e.target.value)}
 
     useEffect(() => {
-        axios.get(`${process.env.REACT_APP_EC2_API_URL}/checkid/${sessionStorage.getItem('token')}`)
+        axios.get(`http://127.0.0.1:5000/checkid/${sessionStorage.getItem('userId')}`)
         .then(responce => {
-            setID(responce.data.ID)
-            setUserId(responce.data.userId)
+            setUserId(responce.data.ID)
         }).catch(error => console.log(error));
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     const postData = () => {

@@ -9,23 +9,24 @@ import Comment from '../Comment/Comment';
 const BoardViewContent = ({boardId}) =>{
     // 게시판 상세정보 데이터
     const [ boardData, setBoardData] = useState([{}]);
-    const [ userData, setUserData] = useState([{}]);
+
     const [ title, setTitle ] = useState('');
     const [ content, setContent ] = useState('');
     const today = new Date()
-
     //반납 - 캘린더
     const [returnDate, setReturnDate] = useState(new Date(today.setDate(today.getDate() + 7)))
 
+
+
     const handlerChangeTitle = e => {
         setTitle(e.target.value)
-        if (content == null) {
+        if (content === null) {
             setContent(content)
         }
     }
     const handlerChangeContent = e => {
         setContent(e.target.value)
-        if (title == null) {
+        if (title === null) {
             setTitle(title)
         }
     }
@@ -35,50 +36,51 @@ const BoardViewContent = ({boardId}) =>{
 
     // 게시판 데이터 가져오기
     useEffect(() => {
-        console.log("session : ", sessionStorage.getItem('token'))
-        axios.get(`${process.env.REACT_APP_EC2_API_URL}/board/detail/${boardId}/${sessionStorage.getItem('token')}`)
+        axios.get(`${process.env.REACT_APP_EC2_API_URL}/board/detail/${boardId}`)
         .then(res => {
-            console.log(res)
-            console.log(res.data.userData['userId'], res.data.boardData["userId"])
-            setUserData(res.data.userData)
+            // console.log("111111111111111111111111111111111111111111")
             if (res.data === 'DELETE') {
                 alert('삭제된 게시물입니다:)')
                 navigate('/board');
             }
             //로그인 x - 목록 buttonChk = 1
-            else if(sessionStorage.getItem('token') === null ){
+            else if(sessionStorage.getItem('userId') === null ){
                 setButtonChk("1")
-                setBoardData(res.data.boardData)
+                setBoardData(res.data)
             }
-
+            //로그인 0
             //로그인 0 - 로그인 user = 게시물 작성자 user
-            else if(res.data.userData['userId'] === res.data.boardData["userId"]){
+            else if(Number(sessionStorage.getItem('userId')) === res.data[0]["userId"]){
+                // alert("목록 / 수정 / 삭제")
+                console.log(sessionStorage.getItem('userId'),"==",res.data[0]["userId"], "=> ", (sessionStorage.getItem('userId')==res.data[0]["userId"]))
                 setButtonChk("2")
-                setBoardData(res.data.boardData)
+                setBoardData(res.data)
             }
             //로그인 0 - 로그인 user != 게시물 작성자 user
             else {
                 //게시물 : 대여가능한경우
-                if(res.data.boardData["rent"] === "active"){    
+                if(res.data[0]["rent"] === "active"){    
+                    // alert("대여")
                     setButtonChk("3")       
-                } else if (res.data.boardData['rent'] === 'disable') {
+                } else if (res.data[0]['rent'] === 'disable') {
                     setButtonChk("0")
                 }
                  //게시물 : 대여중인경우
                 else{
                     //게시물 : 대여중인경우 - 대여한 사람인경우
-                    if(res.data.boardData["rentusreId"] === res.data.userData['userId']){
+                    if(res.data[0]["rentusreId"] === sessionStorage.getItem('userId')){
+                        // alert("반납")
                         setButtonChk("4")  
                     }
                     //게시물 : 대여중인경우 - 대여하지 않은 사람인경우
                     else{
+                        // alert("대여중")
                         setButtonChk("5") 
                     }
                 }
-                setBoardData(res.data.boardData)
+                setBoardData(res.data)
             }
         }).catch(err => console.log(err));
-        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 
     // 상태변수사용해서 textarea 활성하기
@@ -94,24 +96,22 @@ const BoardViewContent = ({boardId}) =>{
     //수정가능상태 edit=true
     const handlerEditFinish= () =>{
         // 수정완료 후 데이터 변경
-        console.log("수정 : ", boardId, title, content)
         axios.put(`${process.env.REACT_APP_EC2_API_URL}/boardEdit/${boardId}`, {title : title, content : content}, { headers: { 'Content-Type': 'application/json' } })
         .then(res => {
             setEdit(!edit);
-            // console.log(res)
-            setBoardData(res.data.boardData[0])
+            setBoardData(res.data)
         }).catch(err => console.log(err));
 
         // window.location.reload();
-        navigate(0)
     }
     
     const handlerDel = () => {
-        if ( userData.userId === boardData.userId) {
+        if (sessionStorage.getItem('userId') == boardData[0].userId) {
             // 게시물 삭제
             axios.delete(`${process.env.REACT_APP_EC2_API_URL}/boardDelete/${boardId}`)
             .then(response => {
-
+                // console.log("HI I AM BOARDDELETE API");
+                // console.log('handlerDel',response);
             }).catch(err => console.log(err));
 
             alert('삭제되었습니다.');
@@ -123,13 +123,13 @@ const BoardViewContent = ({boardId}) =>{
     };    
     
     const handlerRent =() => {
-        if (userData.userId === null){
+        if (sessionStorage.getItem('userId') == null){
             alert("로그인하신 후 이용해주세요");
         }
         else{
             // alert("대여 가능");
             console.log(returnDate)
-            axios.put(`${process.env.REACT_APP_EC2_API_URL}/boardrent/${userData.userId}`, {boardId:boardId, returnDate:returnDate}, { headers: { 'Content-Type': 'application/json' } })
+            axios.put(`${process.env.REACT_APP_EC2_API_URL}/boardrent/${sessionStorage.getItem('userId')}`, {boardId:boardId, returnDate:returnDate}, { headers: { 'Content-Type': 'application/json' } })
             .then(response => {
                 console.log(response.data)
                 if (response.data === 'SUCCESS') {
@@ -162,8 +162,8 @@ const BoardViewContent = ({boardId}) =>{
                     <dl>
                         <dt>제목</dt>
                         <dd>
-                            {edit && (<textarea disabled className="title" value={boardData.title}></textarea>)}
-                            {!edit  && (<textarea className="title" defaultValue={boardData.title} onChange={handlerChangeTitle}></textarea>)}
+                            {edit && (<textarea disabled className="title" value={boardData[0].title}></textarea>)}
+                            {!edit  && (<textarea className="title" defaultValue={boardData[0].title} onChange={handlerChangeTitle}></textarea>)}
                         
                         </dd>
                     </dl> 
@@ -171,23 +171,23 @@ const BoardViewContent = ({boardId}) =>{
                 <div className="info">
                     <dl>
                         <dt>번호</dt>
-                        <dd>{boardData.boardId}</dd>
+                        <dd>{boardData[0].boardId}</dd>
                     </dl>
                     <dl>
                         <dt>글쓴이</dt>
-                        <dd>{boardData.ID}</dd>
+                        <dd>{boardData[0].ID}</dd>
                     </dl>
                     <dl>
                         <dt>작성일</dt>
-                        <dd>{boardData.createAt}</dd>
+                        <dd>{boardData[0].createAt}</dd>
                     </dl>
                     <dl>
                         <dt>지역</dt>
-                        <dd>{boardData.location}</dd>
+                        <dd>{boardData[0].location}</dd>
                     </dl>
                 </div>
-                {edit && (<textarea disabled value={boardData.content}></textarea>)}
-                {!edit && (<textarea defaultValue={boardData.content} onChange={handlerChangeContent}></textarea>)}
+                {edit && (<textarea disabled value={boardData[0].content}></textarea>)}
+                {!edit && (<textarea defaultValue={boardData[0].content} onChange={handlerChangeContent}></textarea>)}
                 
             </div>
             <div className='comment'>
